@@ -1,28 +1,37 @@
 import { useState } from 'react'
-import { validateEmail } from '../validation'
+import { login } from '../api/api' //
 
 const Login = () => {
-  const [email, setEmail] = useState('')
+  const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [errors, setErrors] = useState({ email: '', password: '' })
-  const [touched, setTouched] = useState({ email: false, password: false })
+  const [errors, setErrors] = useState({
+    username: '',
+    password: '',
+    server: '',
+  })
+  const [touched, setTouched] = useState({ username: false, password: false })
+  const [isLoading, setIsLoading] = useState(false)
 
-  const handleEmailChange = (e) => {
+  const handleUsernameChange = (e) => {
     const value = e.target.value
-    setEmail(value)
+    setUsername(value)
 
-    if (validateEmail(value)) {
-      setErrors((prev) => ({ ...prev, email: '' }))
-    } else if (touched.email) {
-      setErrors((prev) => ({ ...prev, email: 'Invalid email format' }))
+    if (value.length >= 3) {
+      setErrors((prev) => ({ ...prev, username: '' }))
+    } else if (touched.username) {
+      setErrors((prev) => ({
+        ...prev,
+        username: 'Username must be at least 3 characters',
+      }))
     }
   }
 
-  const handleEmailBlur = () => {
-    setTouched((prev) => ({ ...prev, email: true }))
+  const handleUsernameBlur = () => {
+    setTouched((prev) => ({ ...prev, username: true }))
     setErrors((prev) => ({
       ...prev,
-      email: validateEmail(email) ? '' : 'Invalid email format',
+      username:
+        username.length >= 3 ? '' : 'Username must be at least 3 characters',
     }))
   }
 
@@ -49,11 +58,30 @@ const Login = () => {
     }))
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
+    setErrors((prev) => ({ ...prev, server: '' }))
+
+    try {
+      setIsLoading(true)
+      await login({ username, password })
+      setUsername('')
+      setPassword('')
+      setErrors({
+        username: '',
+        password: '',
+        server: '',
+      })
+      //навігація
+    } catch (error) {
+      setErrors((prev) => ({ ...prev, server: error.message }))
+    } finally {
+      setIsLoading(false)
+    }
   }
 
-  const isFormValid = !errors.email && !errors.password && email && password
+  const isFormValid =
+    !errors.username && !errors.password && username && password
 
   return (
     <div className="container mt-5">
@@ -64,22 +92,25 @@ const Login = () => {
               <h5 className="card-title text-center">Login</h5>
             </div>
             <div className="card-body">
+              {errors.server && (
+                <div className="alert alert-danger">{errors.server}</div>
+              )}
               <div className="mb-3">
-                <label htmlFor="email" className="form-label">
-                  Email
+                <label htmlFor="username" className="form-label">
+                  Username
                 </label>
                 <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  className={`form-control ${touched.email && errors.email ? 'is-invalid' : ''}`}
-                  value={email}
-                  onChange={handleEmailChange}
-                  onBlur={handleEmailBlur}
+                  type="text"
+                  id="username"
+                  name="username"
+                  className={`form-control ${touched.username && errors.username ? 'is-invalid' : ''}`}
+                  value={username}
+                  onChange={handleUsernameChange}
+                  onBlur={handleUsernameBlur}
                   required
                 />
-                {touched.email && errors.email && (
-                  <div className="invalid-feedback">{errors.email}</div>
+                {touched.username && errors.username && (
+                  <div className="invalid-feedback">{errors.username}</div>
                 )}
               </div>
               <div className="mb-3">
@@ -106,7 +137,7 @@ const Login = () => {
                 disabled={!isFormValid}
                 onClick={handleSubmit}
               >
-                Sign in
+                {!isLoading ? 'Sign in' : 'In progress...'}
               </button>
             </div>
           </div>
