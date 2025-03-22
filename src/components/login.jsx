@@ -1,5 +1,7 @@
 import { useState } from 'react'
-import { login } from '../api/api' //
+import { login as apiLogin } from '../api/api'
+import { useAuth } from '../auth/AuthContext'
+import { useNavigate } from 'react-router-dom'
 
 const Login = () => {
   const [username, setUsername] = useState('')
@@ -11,6 +13,8 @@ const Login = () => {
   })
   const [touched, setTouched] = useState({ username: false, password: false })
   const [isLoading, setIsLoading] = useState(false)
+  const { login: authLogin } = useAuth()
+  const navigate = useNavigate()
 
   const handleUsernameChange = (e) => {
     const value = e.target.value
@@ -62,9 +66,13 @@ const Login = () => {
     e.preventDefault()
     setErrors((prev) => ({ ...prev, server: '' }))
 
+    if (!isFormValid) return
+
     try {
       setIsLoading(true)
-      await login({ username, password })
+      const token = await apiLogin({ username, password })
+      authLogin(token)
+
       setUsername('')
       setPassword('')
       setErrors({
@@ -72,7 +80,8 @@ const Login = () => {
         password: '',
         server: '',
       })
-      //навігація
+
+      navigate('/dashboard')
     } catch (error) {
       setErrors((prev) => ({ ...prev, server: error.message }))
     } finally {
@@ -84,9 +93,9 @@ const Login = () => {
     !errors.username && !errors.password && username && password
 
   return (
-    <div className="container mt-5">
-      <div className="row justify-content-center">
-        <div className="col-md-6">
+    <div className="container d-flex justify-content-center align-items-center flex-grow-1">
+      <div className="row justify-content-center w-100">
+        <div className="col-md-6 col-sm-10">
           <div className="card">
             <div className="card-header">
               <h5 className="card-title text-center">Login</h5>
@@ -95,50 +104,51 @@ const Login = () => {
               {errors.server && (
                 <div className="alert alert-danger">{errors.server}</div>
               )}
-              <div className="mb-3">
-                <label htmlFor="username" className="form-label">
-                  Username
-                </label>
-                <input
-                  type="text"
-                  id="username"
-                  name="username"
-                  className={`form-control ${touched.username && errors.username ? 'is-invalid' : ''}`}
-                  value={username}
-                  onChange={handleUsernameChange}
-                  onBlur={handleUsernameBlur}
-                  required
-                />
-                {touched.username && errors.username && (
-                  <div className="invalid-feedback">{errors.username}</div>
-                )}
-              </div>
-              <div className="mb-3">
-                <label htmlFor="password" className="form-label">
-                  Password
-                </label>
-                <input
-                  type="password"
-                  id="password"
-                  name="password"
-                  className={`form-control ${touched.password && errors.password ? 'is-invalid' : ''}`}
-                  value={password}
-                  onChange={handlePasswordChange}
-                  onBlur={handlePasswordBlur}
-                  required
-                />
-                {touched.password && errors.password && (
-                  <div className="invalid-feedback">{errors.password}</div>
-                )}
-              </div>
-              <button
-                className="btn btn-primary w-100"
-                type="submit"
-                disabled={!isFormValid}
-                onClick={handleSubmit}
-              >
-                {!isLoading ? 'Sign in' : 'In progress...'}
-              </button>
+              <form onSubmit={handleSubmit}>
+                <div className="mb-3">
+                  <label htmlFor="username" className="form-label">
+                    Username
+                  </label>
+                  <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    className={`form-control ${touched.username && errors.username ? 'is-invalid' : ''}`}
+                    value={username}
+                    onChange={handleUsernameChange}
+                    onBlur={handleUsernameBlur}
+                    required
+                  />
+                  {touched.username && errors.username && (
+                    <div className="invalid-feedback">{errors.username}</div>
+                  )}
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="password" className="form-label">
+                    Password
+                  </label>
+                  <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    className={`form-control ${touched.password && errors.password ? 'is-invalid' : ''}`}
+                    value={password}
+                    onChange={handlePasswordChange}
+                    onBlur={handlePasswordBlur}
+                    required
+                  />
+                  {touched.password && errors.password && (
+                    <div className="invalid-feedback">{errors.password}</div>
+                  )}
+                </div>
+                <button
+                  className="btn btn-primary w-100"
+                  type="submit"
+                  disabled={!isFormValid || isLoading}
+                >
+                  {!isLoading ? 'Sign in' : 'In progress...'}
+                </button>
+              </form>
             </div>
           </div>
         </div>

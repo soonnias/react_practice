@@ -29,14 +29,18 @@ export const login = async (credentials) => {
 
     const { accessToken } = response.data
 
-    if (accessToken) {
+    /*if (accessToken) {
       localStorage.setItem('token', accessToken)
-    }
+    }*/
 
-    return response.data
+    return accessToken
   } catch (error) {
     throw new Error(error.response?.data?.message || 'Login failed')
   }
+}
+
+export const logout = async () => {
+  localStorage.removeItem('token')
 }
 
 export const fetchUsers = async () => {
