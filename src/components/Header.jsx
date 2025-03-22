@@ -2,28 +2,34 @@
 import { useAuth } from '../auth/AuthContext'
 import { Link } from 'react-router-dom'
 
-const Navigation = () => {
+const Header = () => {
   const { isLoggedIn, logout } = useAuth()
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-primary p-2 shadow">
+    <nav className="navbar navbar-expand-lg navbar-dark bg-primary shadow">
       <div className="container-fluid d-flex justify-content-between align-items-center">
-        <h3 className="text-white mb-0">
+        {/* Адаптивний заголовок з використанням Bootstrap класів */}
+        <div>
           <Link to="/" className="text-white text-decoration-none">
-            Peoples
+            <h3 className="mb-0 fs-4 fs-md-3">Peoples</h3>
           </Link>
-        </h3>
+        </div>
+
+        {/* Кнопки з адаптивними розмірами */}
         <div>
           {isLoggedIn ? (
             <button
               type="button"
-              className="btn btn-outline-light"
+              className="btn btn-outline-light btn-sm py-1 px-2 py-md-2 px-md-3"
               onClick={logout}
             >
               Logout
             </button>
           ) : (
-            <Link to="/login" className="btn btn-outline-light">
+            <Link
+              to="/login"
+              className="btn btn-outline-light btn-sm py-1 px-2 py-md-2 px-md-3"
+            >
               Login
             </Link>
           )}
@@ -33,4 +39,4 @@ const Navigation = () => {
   )
 }
 
-export default Navigation
+export default Header

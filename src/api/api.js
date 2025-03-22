@@ -46,7 +46,7 @@ export const logout = async () => {
 export const fetchUsers = async () => {
   try {
     const response = await axiosInstance.get('/users')
-    return response.data
+    return response.data.users
   } catch (error) {
     throw new Error(error.response?.data?.message || 'Error fetching users')
   }
