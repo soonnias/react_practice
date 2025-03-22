@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { fetchUsers } from '../api/api'
+import { useNavigate } from 'react-router-dom'
 
 const UserList = () => {
   const [search, setSearch] = useState('')
@@ -7,6 +8,7 @@ const UserList = () => {
   const [users, setUsers] = useState([])
   const [filteredUsers, setFilteredUsers] = useState([])
   const [loading, setLoading] = useState(true)
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchData = async () => {
@@ -35,7 +37,7 @@ const UserList = () => {
   }
 
   return (
-    <div className="container d-flex flex-column vh-100 mt-3 align-items-center">
+    <div className="container d-flex flex-column h-100 mt-3 align-items-center">
       {/* Заголовок */}
       <h3 className="mt-2 mb-4 text-center">All users</h3>
 
@@ -47,7 +49,7 @@ const UserList = () => {
             className="form-control"
             value={search}
             onChange={handleSearch}
-            placeholder="Search..."
+            placeholder="Search by username..."
           />
         </div>
         <div className="col-4 col-sm-4 col-md-3 text-end p-0">
@@ -98,7 +100,10 @@ const UserList = () => {
                       </ul>
                     </div>
                     <div className="card-footer bg-white border-0 text-center">
-                      <button className="btn btn-outline-primary px-4">
+                      <button
+                        className="btn btn-outline-primary px-4"
+                        onClick={() => navigate(`/users/${user.id}`)}
+                      >
                         Details...
                       </button>
                     </div>

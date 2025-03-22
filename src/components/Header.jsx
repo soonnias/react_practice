@@ -8,14 +8,12 @@ const Header = () => {
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-primary shadow">
       <div className="container-fluid d-flex justify-content-between align-items-center">
-        {/* Адаптивний заголовок з використанням Bootstrap класів */}
         <div>
           <Link to="/" className="text-white text-decoration-none">
             <h3 className="mb-0 fs-4 fs-md-3">Peoples</h3>
           </Link>
         </div>
 
-        {/* Кнопки з адаптивними розмірами */}
         <div>
           {isLoggedIn ? (
             <button

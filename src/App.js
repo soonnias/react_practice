@@ -5,6 +5,7 @@ import Header from './components/Header'
 import Login from './components/Login'
 import Dashboard from './components/dashboard'
 import UserList from './components/UserList'
+import UserCard from './components/UserCard'
 
 const ProtectedRoute = ({ children }) => {
   const { isLoggedIn } = useAuth()
@@ -56,6 +57,17 @@ function App() {
               <ProtectedRoute>
                 <PublicPage>
                   <UserList />
+                </PublicPage>
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/users/:id"
+            element={
+              <ProtectedRoute>
+                <PublicPage>
+                  <UserCard />
                 </PublicPage>
               </ProtectedRoute>
             }

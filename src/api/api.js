@@ -55,7 +55,8 @@ export const fetchUsers = async () => {
 export const getUserById = async (userId) => {
   try {
     const response = await axiosInstance.get(`/users/${userId}`)
-    const { firstName, lastName, email, phone, address, image } = response.data
+    const { firstName, lastName, email, phone, address, image, age } =
+      response.data
 
     // Форматуємо адресу без координат
     const formattedAddress = [
@@ -76,6 +77,7 @@ export const getUserById = async (userId) => {
       phone,
       address: formattedAddress,
       image,
+      age,
     }
   } catch (error) {
     throw new Error(error.response?.data?.message || 'Error fetching user')
