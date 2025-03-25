@@ -5,6 +5,7 @@ import Login from './components/Login'
 import UserList from './components/UserList'
 import UserCard from './components/UserCard'
 import UserForm from './components/UserForm'
+import UserDetails from './components/UserDetails'
 
 const ProtectedRoute = ({ children }) => {
   const { isLoggedIn } = useAuth()
@@ -55,7 +56,7 @@ function App() {
             element={
               <ProtectedRoute>
                 <PublicPage>
-                  <UserCard />
+                  <UserDetails />
                 </PublicPage>
               </ProtectedRoute>
             }
