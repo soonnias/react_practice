@@ -53,7 +53,10 @@ const UserList = () => {
           />
         </div>
         <div className="col-4 col-sm-4 col-md-3 text-end p-0">
-          <button className="btn btn-primary">
+          <button
+            className="btn btn-primary"
+            onClick={() => navigate('/users/add')}
+          >
             <span className="d-none d-sm-inline">Create new user</span>
             <span className="d-inline d-sm-none">New user</span>
           </button>

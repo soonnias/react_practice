@@ -1,4 +1,3 @@
-// App.js
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { AuthProvider, useAuth } from './auth/AuthContext'
 import Header from './components/Header'
@@ -6,6 +5,7 @@ import Login from './components/Login'
 import Dashboard from './components/dashboard'
 import UserList from './components/UserList'
 import UserCard from './components/UserCard'
+import UserForm from './components/UserForm'
 
 const ProtectedRoute = ({ children }) => {
   const { isLoggedIn } = useAuth()
@@ -68,6 +68,28 @@ function App() {
               <ProtectedRoute>
                 <PublicPage>
                   <UserCard />
+                </PublicPage>
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/users/add"
+            element={
+              <ProtectedRoute>
+                <PublicPage>
+                  <UserForm role="create" />
+                </PublicPage>
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/users/edit/:id"
+            element={
+              <ProtectedRoute>
+                <PublicPage>
+                  <UserForm role="edit" />
                 </PublicPage>
               </ProtectedRoute>
             }

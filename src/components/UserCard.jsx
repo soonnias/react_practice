@@ -82,7 +82,7 @@ const UserCard = () => {
               <div className="d-flex flex-column flex-sm-row justify-content-sm-end gap-3">
                 <button
                   className="btn btn-warning mb-2 mb-sm-0"
-                  onClick={() => navigate(`/edit/${user.id}`)}
+                  onClick={() => navigate(`/users/edit/${user.id}`)}
                 >
                   Edit
                 </button>

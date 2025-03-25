@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { validateEmail, validatePhone, validateUserData } from '../validation'
+import { validateUserData } from '../validation/validation'
 
 const BASE_URL = 'https://dummyjson.com/'
 
@@ -39,10 +39,6 @@ export const login = async (credentials) => {
   }
 }
 
-export const logout = async () => {
-  localStorage.removeItem('token')
-}
-
 export const fetchUsers = async () => {
   try {
     const response = await axiosInstance.get('/users')
@@ -55,7 +51,7 @@ export const fetchUsers = async () => {
 export const getUserById = async (userId) => {
   try {
     const response = await axiosInstance.get(`/users/${userId}`)
-    const { firstName, lastName, email, phone, address, image, age } =
+    const { firstName, lastName, email, phone, address, image, age, id } =
       response.data
 
     // Форматуємо адресу без координат
@@ -71,6 +67,7 @@ export const getUserById = async (userId) => {
       .join(', ')
 
     return {
+      id,
       firstName,
       lastName,
       email,

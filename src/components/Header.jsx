@@ -1,4 +1,3 @@
-// Navigation.js
 import { useAuth } from '../auth/AuthContext'
 import { Link } from 'react-router-dom'
 
@@ -9,7 +8,7 @@ const Header = () => {
     <nav className="navbar navbar-expand-lg navbar-dark bg-primary shadow">
       <div className="container-fluid d-flex justify-content-between align-items-center">
         <div>
-          <Link to="/" className="text-white text-decoration-none">
+          <Link to="/users" className="text-white text-decoration-none">
             <h3 className="mb-0 fs-4 fs-md-3">Peoples</h3>
           </Link>
         </div>
