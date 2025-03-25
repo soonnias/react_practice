@@ -1,4 +1,3 @@
-// AuthContext.js - для управління станом авторизації
 import { createContext, useState, useContext, useEffect } from 'react'
 
 const AuthContext = createContext(null)

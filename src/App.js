@@ -2,7 +2,6 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { AuthProvider, useAuth } from './auth/AuthContext'
 import Header from './components/Header'
 import Login from './components/Login'
-import Dashboard from './components/dashboard'
 import UserList from './components/UserList'
 import UserCard from './components/UserCard'
 import UserForm from './components/UserForm'
@@ -41,18 +40,7 @@ function App() {
           />
 
           <Route
-            path="/dashboard"
-            element={
-              <ProtectedRoute>
-                <PublicPage>
-                  <Dashboard />
-                </PublicPage>
-              </ProtectedRoute>
-            }
-          />
-
-          <Route
-            path="/users"
+            path="/"
             element={
               <ProtectedRoute>
                 <PublicPage>
@@ -63,7 +51,7 @@ function App() {
           />
 
           <Route
-            path="/users/:id"
+            path="/user/:id"
             element={
               <ProtectedRoute>
                 <PublicPage>
@@ -74,7 +62,7 @@ function App() {
           />
 
           <Route
-            path="/users/add"
+            path="/user/add"
             element={
               <ProtectedRoute>
                 <PublicPage>
@@ -85,7 +73,7 @@ function App() {
           />
 
           <Route
-            path="/users/edit/:id"
+            path="/user/edit/:id"
             element={
               <ProtectedRoute>
                 <PublicPage>
@@ -94,6 +82,8 @@ function App() {
               </ProtectedRoute>
             }
           />
+
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

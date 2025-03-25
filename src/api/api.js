@@ -54,7 +54,6 @@ export const getUserById = async (userId) => {
     const { firstName, lastName, email, phone, address, image, age, id } =
       response.data
 
-    // Форматуємо адресу без координат
     const formattedAddress = [
       address.address,
       address.city,
@@ -83,7 +82,7 @@ export const getUserById = async (userId) => {
 
 export const createUser = async (firstName, lastName, email, phone, age) => {
   try {
-    validateUserData(firstName, lastName, email, phone, age) // Перевіряємо всі поля
+    validateUserData(firstName, lastName, email, phone, age)
 
     const userData = { firstName, lastName, email, phone, age }
     const response = await axiosInstance.post('/users/add', userData)

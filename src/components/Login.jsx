@@ -81,7 +81,7 @@ const Login = () => {
         server: '',
       })
 
-      navigate('/users')
+      navigate('/')
     } catch (error) {
       setErrors((prev) => ({ ...prev, server: error.message }))
     } finally {

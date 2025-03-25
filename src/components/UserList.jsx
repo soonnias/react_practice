@@ -38,7 +38,6 @@ const UserList = () => {
 
   return (
     <div className="container d-flex flex-column h-100 mt-3 align-items-center">
-      {/* Заголовок */}
       <h3 className="mt-2 mb-4 text-center">All users</h3>
 
       {/* Пошук + створення */}
@@ -55,7 +54,7 @@ const UserList = () => {
         <div className="col-4 col-sm-4 col-md-3 text-end p-0">
           <button
             className="btn btn-primary"
-            onClick={() => navigate('/users/add')}
+            onClick={() => navigate('/user/add')}
           >
             <span className="d-none d-sm-inline">Create new user</span>
             <span className="d-inline d-sm-none">New user</span>
@@ -105,7 +104,7 @@ const UserList = () => {
                     <div className="card-footer bg-white border-0 text-center">
                       <button
                         className="btn btn-outline-primary px-4"
-                        onClick={() => navigate(`/users/${user.id}`)}
+                        onClick={() => navigate(`/user/${user.id}`)}
                       >
                         Details...
                       </button>

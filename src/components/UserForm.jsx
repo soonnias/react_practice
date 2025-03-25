@@ -51,10 +51,11 @@ const UserForm = ({ role = 'create' }) => {
           setLoading(false)
         }
       }
+
+      setLoading(false)
     }
 
     fetchUserById(id)
-    setLoading(false)
   }, [id, role])
 
   const formatPhoneNumber = (value) => {
@@ -100,7 +101,6 @@ const UserForm = ({ role = 'create' }) => {
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    // перевірка валідності всіх полів
     const newErrors = {}
 
     Object.keys(formData).forEach((field) => {

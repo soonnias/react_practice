@@ -1,6 +1,7 @@
 import { useNavigate, useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
-import { getUserById } from '../api/api'
+import { deleteUser, getUserById } from '../api/api'
+import ModalConfirm from './ModalConfirm'
 
 const UserCard = () => {
   const { id } = useParams()
@@ -8,6 +9,7 @@ const UserCard = () => {
   const [error, setError] = useState(false)
   const navigate = useNavigate()
   const [user, setUser] = useState({})
+  const [showConfirm, setShowConfirm] = useState(false)
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -24,6 +26,18 @@ const UserCard = () => {
 
     fetchUser()
   }, [id])
+
+  const handleDelete = async (confirm) => {
+    setShowConfirm(false)
+    if (!confirm) return
+
+    try {
+      await deleteUser(id)
+      navigate('/')
+    } catch (error) {
+      setError(error.message || 'Failed to delete user')
+    }
+  }
 
   return (
     <div className="container d-flex flex-column vh-85 mt-3 align-items-center justify-content-center">
@@ -82,19 +96,21 @@ const UserCard = () => {
               <div className="d-flex flex-column flex-sm-row justify-content-sm-end gap-3">
                 <button
                   className="btn btn-warning mb-2 mb-sm-0"
-                  onClick={() => navigate(`/users/edit/${user.id}`)}
+                  onClick={() => navigate(`/user/edit/${user.id}`)}
                 >
                   Edit
                 </button>
                 <button
                   className="btn btn-danger mb-2 mb-sm-0"
-                  onClick={() => {}}
+                  onClick={() => {
+                    setShowConfirm(true)
+                  }}
                 >
                   Delete
                 </button>
                 <button
                   className="btn btn-primary"
-                  onClick={() => navigate('/users')}
+                  onClick={() => navigate('/')}
                 >
                   Back to Users
                 </button>
@@ -104,6 +120,14 @@ const UserCard = () => {
         </div>
       )}
       {error && <div className="alert alert-danger w-100 mt-3">{error}</div>}
+
+      {showConfirm && (
+        <ModalConfirm
+          modalTitle="Are you sure you want to delete this user?"
+          onSubmit={handleDelete}
+          onClose={() => setShowConfirm(false)}
+        />
+      )}
     </div>
   )
 }
