@@ -3,7 +3,6 @@ import { AuthProvider, useAuth } from './auth/AuthContext'
 import Header from './components/Header'
 import Login from './components/Login'
 import UserList from './components/UserList'
-import UserCard from './components/UserCard'
 import UserForm from './components/UserForm'
 import UserDetails from './components/UserDetails'
 

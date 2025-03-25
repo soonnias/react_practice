@@ -131,3 +131,13 @@ export const deleteUser = async (userId) => {
     return null
   }
 }
+
+export const searchUsers = async (searchQuery) => {
+  try {
+    const response = await axiosInstance.get(`/users/search?q=${searchQuery}`)
+    return response.data.users
+  } catch (error) {
+    console.error('Error searching user:', error.message)
+    return null
+  }
+}

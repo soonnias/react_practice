@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { fetchUsers } from '../api/api'
+import { fetchUsers, searchUsers } from '../api/api'
 import { useNavigate } from 'react-router-dom'
 import UserCard from './UserCard'
 
@@ -9,6 +9,7 @@ const UserList = () => {
   const [users, setUsers] = useState([])
   const [filteredUsers, setFilteredUsers] = useState([])
   const [loading, setLoading] = useState(true)
+  const [searchMessage, setSearchMessage] = useState('')
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -28,40 +29,70 @@ const UserList = () => {
     fetchData()
   }, [])
 
-  const handleSearch = (e) => {
-    setSearch(e.target.value)
-    setFilteredUsers(
-      users.filter((user) =>
-        user.username.toLowerCase().includes(e.target.value.toLowerCase())
-      )
-    )
+  const handleSearch = async () => {
+    if (!search.trim()) {
+      setSearchMessage('')
+      setFilteredUsers(users)
+      return
+    }
+
+    try {
+      setLoading(true)
+      const searchResults = await searchUsers(search)
+      setFilteredUsers(searchResults)
+      setSearchMessage(`Search by "${search}"`)
+    } catch (error) {
+      setError('Failed to search users')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleClear = () => {
+    setSearch('')
+    setSearchMessage('')
+    setFilteredUsers(users)
   }
 
   return (
     <div className="container d-flex flex-column h-100 mt-3 align-items-center">
       <h3 className="mt-2 mb-4 text-center">All users</h3>
 
-      {/* Пошук + створення */}
-      <div className="row justify-content-between align-items-center w-100 mb-3">
-        <div className="col-8 col-sm-8 col-md-9 ps-0">
+      {/* Пошук */}
+      <div className="row justify-content-center w-100 mb-3 text-center">
+        <div className="col-12 col-md-6 mb-2">
           <input
             type="text"
             className="form-control"
             value={search}
-            onChange={handleSearch}
-            placeholder="Search by username..."
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search..."
           />
         </div>
-        <div className="col-4 col-sm-4 col-md-3 text-end p-0">
+        <div className="col-12 col-md-3 mb-2 d-grid">
           <button
-            className="btn btn-primary"
-            onClick={() => navigate('/user/add')}
+            className="btn btn-outline-primary w-100"
+            onClick={handleSearch}
           >
-            <span className="d-none d-sm-inline">Create new user</span>
-            <span className="d-inline d-sm-none">New user</span>
+            Search
+          </button>
+        </div>
+        <div className="col-12 col-md-3 mb-2 d-grid">
+          <button
+            className="btn btn-outline-secondary w-100"
+            onClick={handleClear}
+          >
+            Clear
           </button>
         </div>
       </div>
+
+      {searchMessage && (
+        <div className="alert alert-info w-100 text-center">
+          {searchMessage}
+        </div>
+      )}
+
       {error && <div className="alert alert-danger w-100">{error}</div>}
 
       {/* Контейнер для списку користувачів */}
@@ -78,7 +109,9 @@ const UserList = () => {
         ) : (
           <div className="row g-4 pb-5">
             {filteredUsers.length > 0 ? (
-              filteredUsers.map((user) => <UserCard user={user} />)
+              filteredUsers.map((user) => (
+                <UserCard key={user.id} user={user} />
+              ))
             ) : (
               <div className="col-12">
                 <h5 className="text-center">No users found</h5>
@@ -87,6 +120,25 @@ const UserList = () => {
           </div>
         )}
       </div>
+
+      <button
+        className="btn btn-secondary btn-lg rounded-circle position-fixed bottom-3 end-3 shadow-lg"
+        style={{
+          width: '50px',
+          height: '50px',
+          right: '10px',
+          bottom: '10px',
+          fontSize: '30px',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          color: 'white',
+          boxShadow: '0 2px 4px rgba(0, 0, 0, 0.5)',
+        }}
+        onClick={() => navigate('/user/add')}
+      >
+        +
+      </button>
     </div>
   )
 }
