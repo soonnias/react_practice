@@ -17,6 +17,20 @@ const ProtectedRoute = ({ children }) => {
   return children
 }
 
+const LoginRoute = () => {
+  const { isLoggedIn } = useAuth()
+
+  if (isLoggedIn) {
+    return <Navigate to="/" replace />
+  }
+
+  return (
+    <PublicPage>
+      <Login />
+    </PublicPage>
+  )
+}
+
 const PublicPage = ({ children }) => {
   return (
     <div className="d-flex flex-column min-vh-100">
@@ -31,14 +45,7 @@ function App() {
     <AuthProvider>
       <BrowserRouter>
         <Routes>
-          <Route
-            path="/login"
-            element={
-              <PublicPage>
-                <Login />
-              </PublicPage>
-            }
-          />
+          <Route path="/login" element={<LoginRoute />} />
 
           <Route
             path="/"
